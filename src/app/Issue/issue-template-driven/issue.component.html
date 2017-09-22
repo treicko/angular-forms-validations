@@ -1,0 +1,163 @@
+En el templateeee
+<div class="container">
+    <div [hidden]="submitted">
+      <form (ngSubmit)="onSubmit()" #issueForm="ngForm">
+        <div class="form-group">
+          <label for="power">Project</label>
+          <select class="form-control" id="project"
+                  required
+                  [(ngModel)]="model.project" name="project"
+                  #project="ngModel">
+            <option *ngFor="let proj of projects" [value]="proj">{{proj}}</option>
+          </select>
+          <div [hidden]="project.valid || project.pristine" class="alert alert-danger">
+            Project is required.
+          </div>
+          TODO: remove this: {{model.project}}
+        </div>
+
+        <div class="form-group">
+            <label for="power">Issue type</label>
+            <select class="form-control" id="issuetype"
+                    required
+                    [(ngModel)]="model.issueType" name="issuetype"
+                    #issueType="ngModel">
+              <option *ngFor="let type of issueTypes" [value]="type">{{type}}</option>
+            </select>
+            <div [hidden]="issueType.valid || issueType.pristine" class="alert alert-danger">
+              Issue type is required.
+            </div>
+            TODO: remove this: {{model.issueType}}
+          </div>
+
+        <div class="form-group">
+          <label for="name">Summary</label>
+          <input type="text" class="form-control" id="summary"
+                 autocomplete="false"
+                 appForbiddenName="bob"
+                 required
+                 [(ngModel)]="model.summary" name="summary"
+                 #summary="ngModel">
+          <div [hidden]="summary.valid || summary.pristine"
+               class="alert alert-danger">
+              <div *ngIf="!!summary.errors">
+                <div *ngIf="summary.errors.required">
+                  Summary is required.
+                </div>
+                <div *ngIf="summary.errors.forbiddenName">
+                  Summary cannot be Bob.
+                </div>
+              </div>
+          </div>
+          TODO: remove this: {{model.summary}} className: {{summary.errors | json}}
+        </div>
+  
+        <div class="form-group">
+          <label for="name">Story points</label>
+          <input type="number" class="form-control" id="storyPoints"
+                required
+                min="1"
+                max="100"
+                appAllowNumbers="(^1{1}$|^2{1}$|^3{1}$|^5{1}$|^8{1}$|^13{1}$|^50{1}$|^100{1}$)"
+                [(ngModel)]="model.storyPoints" name="storyPoints"
+                #storyPoints="ngModel">
+          <div [hidden]="storyPoints.valid || storyPoints.pristine"
+               class="alert alert-danger">
+            <div *ngIf="!!storyPoints.errors">
+              <div *ngIf="storyPoints.errors.required">
+                Story points is required.
+              </div>
+              <div *ngIf="storyPoints.errors.min">
+                Story points must be greater than or equal to 1.
+              </div>
+              <div *ngIf="storyPoints.errors.max">
+                Story points must be less than or equal to 100.
+              </div>
+              <div *ngIf="issueForm.controls.storyPoints.errors.allowNumbers">
+                Story points must 1, 2, 3, 5, 8, 13, 50 o 100.
+              </div>
+            </div>
+          </div>
+          TODO: remove this: {{model.storyPoints}} className: {{storyPoints.errors | json}}
+        </div>
+
+        <div class="form-group">
+          <label for="name">Environments</label>
+          <input type="text" class="form-control" id="environments"
+                autocomplete="off"
+                minlength="2"
+                appAllowWords="(\W|^)(qa|dev|vat|prod)(\W|$)"
+                required
+                [(ngModel)]="model.environments" name="environments"
+                #environments="ngModel">
+          <div [hidden]="environments.valid || environments.pristine"
+               class="alert alert-danger">
+                <div *ngIf="!!environments.errors">
+                  <div *ngIf="environments.errors.required">
+                    Environments is required.
+                  </div>
+                  <div *ngIf="environments.errors.minlength">
+                    Environments must be at least 2 characters long.
+                  </div>
+                  <div *ngIf="environments.errors.allowWords">
+                    Environments must be qa, dev, vat, prod.
+                  </div>
+               </div>
+          </div>
+          TODO: remove this: {{model.environments}} className: {{environments.errors | json}}
+        </div>
+  
+        <button type="submit" class="btn btn-success" [disabled]="!issueForm.form.valid">Submit</button>
+        <button type="button" class="btn btn-default" (click)="newIssue(); issueForm.reset()">New Issue</button>
+        <i>with</i> reset
+  
+        &nbsp;&nbsp;
+        <button type="button" class="btn btn-default" (click)="newIssue()">New Issue</button>
+        <i>without</i> reset
+  
+       <!-- NOT SHOWN IN DOCS -->
+        <div>
+          <hr>
+          Name via form.controls = {{showFormControls(issueForm)}}
+        </div>
+       <!-- - -->
+      </form>
+    </div>
+  
+    <div [hidden]="!submitted">
+      <h2>You submitted the following:</h2>
+      <div class="row">
+        <div class="col-xs-3">Project</div>
+        <div class="col-xs-9  pull-left">{{ model.project }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">Issue type</div>
+        <div class="col-xs-9 pull-left">{{ model.issueType }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">Summary</div>
+        <div class="col-xs-9 pull-left">{{ model.summary }}</div>
+      </div>    
+      <div class="row">
+        <div class="col-xs-3">Story points</div>
+        <div class="col-xs-9 pull-left">{{ model.storyPoints }}</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-3">Environments</div>
+        <div class="col-xs-9 pull-left">{{ model.environments }}</div>
+      </div>
+      <br>
+      <button class="btn btn-primary" (click)="submitted=false">Edit</button>
+    </div>
+  </div>
+  
+  <hr>
+  <style>
+    .no-style .ng-valid {
+    border-left: 1px  solid #CCC
+  }
+  
+    .no-style .ng-invalid {
+    border-left: 1px  solid #CCC
+  }
+  </style>

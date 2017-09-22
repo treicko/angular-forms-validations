@@ -1,0 +1,113 @@
+<div class="container">    
+    <form [formGroup]="issueForm" #formDir="ngForm">
+      <div [hidden]="formDir.submitted">
+        <div class="form-group">
+          <label for="project">Project</label>
+          <select id="project" class="form-control"
+              formControlName="project" required >
+            <option *ngFor="let p of projects" [value]="p">{{p}}</option>
+          </select>
+          <div *ngIf="!!issueForm.controls.project">
+            <div *ngIf="issueForm.controls.project.invalid && issueForm.controls.project.touched" class="alert alert-danger">
+              <div *ngIf="issueForm.controls.project.errors.required">Project is required.</div>
+            </div>
+            TODO: remove this: className: {{issueForm.controls.project.errors | json}}
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="issueType">Issue type</label>
+          <select id="issueType" class="form-control"
+              formControlName="issueType" required >
+            <option *ngFor="let issue of issueTypes" [value]="issue">{{issue}}</option>
+          </select>
+          <div *ngIf="!!issueForm.controls.issueType">
+            <div *ngIf="issueForm.controls.issueType.invalid && issueForm.controls.issueType.touched" class="alert alert-danger">
+              <div *ngIf="issueForm.controls.issueType.errors.required">Issue type is required.</div>
+            </div>
+            TODO: remove this: className: {{issueForm.controls.issueType.errors | json}}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="summary">Summary</label>
+          <input id="summary" class="form-control"
+                 formControlName="summary" required>
+
+          <div *ngIf="!!issueForm.controls.summary">
+            <div *ngIf="issueForm.controls.summary.invalid && (issueForm.controls.summary.dirty || issueForm.controls.summary.touched)"
+              class="alert alert-danger">
+ 
+              <div *ngIf="issueForm.controls.summary.errors.required">
+                Summary is required.
+              </div>
+              <div *ngIf="issueForm.controls.summary.errors.forbiddenName">
+                Summary cannot be Bob.
+              </div>
+            </div>
+            TODO: remove this: className: {{issueForm.controls.summary.errors | json}}
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="storyPoints">Story points</label>
+          <input id="storyPoints" class="form-control" type="number"
+                 formControlName="storyPoints" required>
+
+            <div *ngIf="!!issueForm.controls.storyPoints">
+              <div *ngIf="issueForm.controls.storyPoints.invalid && (issueForm.controls.storyPoints.dirty || issueForm.controls.storyPoints.touched)"
+                class="alert alert-danger">
+   
+                  <div *ngIf="issueForm.controls.storyPoints.errors.required">
+                    Story points is required.
+                  </div>
+                  <div *ngIf="issueForm.controls.storyPoints.errors.min">
+                    Story points must be greater than or equal to 1.
+                  </div>
+                  <div *ngIf="issueForm.controls.storyPoints.errors.max">
+                    Story points must be less than or equal to 100.
+                  </div>
+                  <div *ngIf="issueForm.controls.storyPoints.errors.allowNumbers">
+                    Story points must be 1, 2, 3, 5, 8, 13, 50 o 100.
+                  </div>
+              </div>
+              TODO: remove this: className: {{issueForm.controls.storyPoints.errors | json}}
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label for="environments">Environments</label>
+          <input id="environments" class="form-control"
+                 formControlName="environments" required>
+            
+            <div *ngIf="!!issueForm.controls.storyPoints">
+              <div *ngIf="issueForm.controls.environments.invalid && (issueForm.controls.environments.dirty || issueForm.controls.environments.touched)"
+                class="alert alert-danger">
+   
+                <div *ngIf="issueForm.controls.environments.errors.required">
+                  Environments is required.
+                </div>
+                <div *ngIf="issueForm.controls.environments.errors.minlength">
+                  Environments must be at least 2 characters long.
+                </div>
+                <div *ngIf="issueForm.controls.environments.errors.allowWords">
+                  Environments must be qa, dev, vat, prod.
+                </div>
+              </div>
+              TODO: LEo remove this: className: {{issueForm.controls.environments.errors | json}}
+            </div>
+        </div>
+  
+        <button type="submit" class="btn btn-default"
+               [disabled]="issueForm.invalid">Submit</button>
+        <button type="button" class="btn btn-default"
+               (click)="formDir.resetForm({})">Reset</button>
+      </div>
+    </form>
+  
+    <div class="submitted-message" *ngIf="formDir.submitted">
+      <p>You've submitted your issue, {{ issueForm.value.project }}!</p>
+      <button (click)="formDir.resetForm({})">Add new Issue</button>
+    </div>
+  </div>

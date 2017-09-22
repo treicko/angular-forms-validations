@@ -1,0 +1,35 @@
+<div [formGroup]="form">
+  <label [attr.for]="question.key">{{question.label}}</label>
+
+  <div [ngSwitch]="question.controlType">
+    <div class="form-group">
+      <input class="form-control" *ngSwitchCase="'textbox'" [formControlName]="question.key"
+              [id]="question.key" [type]="question.type">
+    </div>
+
+    <div class="form-group">
+      <select class="form-control" [id]="question.key" *ngSwitchCase="'dropdown'" [formControlName]="question.key">
+        <option *ngFor="let opt of question.options" [value]="opt.key">{{opt.value}}</option>
+      </select>
+    </div>
+  </div> 
+
+  <div class="alert alert-danger" *ngIf="!isValid ">
+    {{question.label}} is required
+    <div *ngIf="form.controls.summary.invalid && (form.controls.summary.dirty || form.controls.summary.touched)">
+      <div *ngIf="form.controls.summary.errors.forbiddenName">
+        Summary cannot be Bob.
+      </div>
+    </div>
+    <div *ngIf="form.controls.storyPoints.invalid && (form.controls.storyPoints.dirty || form.controls.storyPoints.touched)">
+      <div *ngIf="form.controls.storyPoints.errors.allowNumbers">
+        Story points must be 1, 2, 3, 5, 8, 13, 50 o 100.
+      </div>
+    </div>
+    <div *ngIf="form.controls.environments.invalid && (form.controls.environments.dirty || form.controls.environments.touched)">
+      <div *ngIf="form.controls.environments.errors.allowWords">
+        Environments must be qa, dev, vat, prod.
+      </div>
+    </div>
+  </div>
+</div>
